@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 from labyrinth_game.constants import ROOMS
-from labyrinth_game.utils import describe_current_room
-from labyrinth_game.player_actions import show_inventory
-from labyrinth_game.player_actions import get_input
-from labyrinth_game.player_actions import move_player
-from labyrinth_game.player_actions import take_item
-from labyrinth_game.player_actions import use_item
-from labyrinth_game.utils import attempt_open_treasure
-from labyrinth_game.utils import solve_puzzle
-from labyrinth_game.utils import show_help
+from labyrinth_game.player_actions import (
+    get_input,
+    move_player,
+    show_inventory,
+    take_item,
+    use_item,
+)
+from labyrinth_game.utils import (
+    attempt_open_treasure,
+    describe_current_room,
+    show_help,
+    solve_puzzle,
+)
 
 game_state = {
         'player_inventory': [], # Инвентарь игрока

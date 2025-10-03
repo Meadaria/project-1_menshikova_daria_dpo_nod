@@ -1,4 +1,6 @@
 from labyrinth_game.constants import ROOMS
+import math
+
 
 def describe_current_room(game_state):
     """Функция описания комнаты"""
@@ -14,7 +16,7 @@ def describe_current_room(game_state):
         print(f"Предметы в комнате: {', '.join(current_items)}")
     if room_data['puzzle']:
         if current_room_name not in game_state['solved_puzzles']:
-            print(f"Кажется, здесь есть загадка (используйте команду solve).") 
+            print("Кажется, здесь есть загадка (используйте команду solve).") 
 
 def solve_puzzle(game_state):
     '''Функция решения загадок.'''
@@ -48,7 +50,7 @@ def attempt_open_treasure(game_state):
             game_state['game_over'] = True
         else:
             print("Ключа нет, но на сундуке есть код. Попробкешь решить? (да/нет)")
-            answer = input('Да/нет: ')
+            answer = input('да/нет: ')
             if answer.lower() == 'да':
                 code = input()
                 if code == room_data['puzzle'][1]:
@@ -60,7 +62,7 @@ def attempt_open_treasure(game_state):
                 print("Вы отступаете от сундука.")
             else:
                 pass
-
+            
 def show_help():
     print("\nДоступные команды:")
     print("  go <direction>  - перейти в направлении (north/south/east/west)")
@@ -71,3 +73,50 @@ def show_help():
     print("  solve           - попытаться решить загадку в комнате")
     print("  quit            - выйти из игры")
     print("  help            - показать это сообщение") 
+
+
+def pseudo_random(seed, modulo):
+    '''JФункция определения случайности в путешествии'''
+    
+    s_1 = seed * 28.333
+    sin_seed = math.sin(s_1)
+    s_2 = sin_seed * 6784.984
+    s_3 = s_2 - math.floor(s_2)
+    s_fin= s_3 * modulo
+    return math.trunc(s_fin)
+
+def trigger_trap(game_state):
+    '''Функция создания ловушек.'''
+
+    print("Ловушка активирована! Пол стал дрожать...")
+
+    if game_state['player_inventory']:
+        missing_index = pseudo_random(game_state['steps_taken'], len(game_state['player_inventory']))
+        missing_item = game_state['player_inventory'][missing_index]
+        game_state['player_inventory'].remove(missing_item)
+        print(f'Неприятненько, но вы потеряли {missing_item}.')
+    else:
+        damage = pseudo_random(game_state['steps_taken'], 10)
+        if damage < 3:
+            print('Вы повержены.')
+            game_state['game_over'] = True
+        else:
+            print('Вы ранены, но живы.')
+
+def random_event(game_state):
+    '''Функция создания случайных событий при перемещении'''
+
+    check_event = pseudo_random(game_state['steps_taken'], 10)
+    if check_event == 0:
+        choose_event = pseudo_random(game_state['steps_taken'], 4)
+        if choose_event == 0:
+            print(f'Да вы счастливчик. Вы нашои монетку и положили ее в инвентарь')
+            game_state['player_inventory'].append('coin')
+        if choose_event == 1:
+            print('Во тьме слышится шорох')
+            if 'sword' in game_state['player_inventory']:
+                print('Вы достали меч и отпугнули существо.')
+        if game_state['current_room'] == 'trap_room' and 'torch' not in game_state['player_inventory']:
+            trigger_trap(game_state)
+            
+
