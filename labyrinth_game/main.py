@@ -26,12 +26,15 @@ game_state = {
 
 def process_command(game_state, command):
     '''Обработка команд'''
+    from labyrinth_game.constants import DIRECTIONS
 
     parts = command.split()
     action = parts[0] if parts else ""
     argument = ' '.join(parts[1:]) if len(parts) > 1 else ""
 
     match action:
+        case direction if direction in DIRECTIONS:
+            move_player(game_state, direction)
         case 'look':
             describe_current_room(game_state)
         case 'use':
