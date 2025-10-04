@@ -2,6 +2,11 @@ import math
 
 from labyrinth_game.constants import ROOMS
 
+EVENT_PROBABILITY = 10
+EVENT_TYPES = 3
+DAMAGE_THRESHOLD = 3
+MAX_DAMAGE = 9
+
 
 def describe_current_room(game_state):
     """Функция описания комнаты"""
@@ -42,7 +47,7 @@ def solve_puzzle(game_state):
                      answer in alternative_answers.get(correct_answer, []))
         
         if is_correct:
-            print('Ну, это победа')
+            print('Правильно!')
             game_state['solved_puzzles'].append(current_room_name)
             game_state['reward'] +=1
 
@@ -65,7 +70,7 @@ def solve_puzzle(game_state):
         print("Загадок здесь нет.")
 
 def attempt_open_treasure(game_state):
-    '''Условие победы'''
+    '''Функция проверяющая условия победы'''
     room_data =  ROOMS.get(game_state['current_room'])
     current_room = game_state['current_room']
 
@@ -123,8 +128,8 @@ def trigger_trap(game_state):
         game_state['player_inventory'].remove(missing_item)
         print('Неприятненько, но вы потеряли {missing_item}.')
     else:
-        damage = pseudo_random(game_state['steps_taken'], 9)
-        if damage < 3:
+        damage = pseudo_random(game_state['steps_taken'], MAX_DAMAGE)
+        if damage < DAMAGE_THRESHOLD:
             print('Вы повержены.')
             game_state['game_over'] = True
         else:
@@ -133,9 +138,9 @@ def trigger_trap(game_state):
 def random_event(game_state):
     '''Функция создания случайных событий при перемещении'''
 
-    check_event = pseudo_random(game_state['steps_taken'], 10)
+    check_event = pseudo_random(game_state['steps_taken'], EVENT_PROBABILITY)
     if check_event == 0:
-        choose_event = pseudo_random(game_state['steps_taken'], 3)
+        choose_event = pseudo_random(game_state['steps_taken'], EVENT_TYPES)
         has_torch = 'torch' in game_state['player_inventory']
 
         if choose_event == 0:

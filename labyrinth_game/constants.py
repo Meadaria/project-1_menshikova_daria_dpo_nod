@@ -2,14 +2,15 @@
 ROOMS = {
     'entrance': {
         'description': 'Вы в темном входе лабиринта...',
-        'exits': {'north': 'hall', 'east': 'trap_room'},
+        'exits': {'north': 'hall', 'east': 'trap_room', 'west' : 'storeroom'},
         'items': ['torch'],
         'puzzle': None
     },
     'hall': {
         'description': 'Большой зал с эхом.'
          'По центру стоит пьедестал с запечатанным сундуком.',
-        'exits': {'south': 'entrance', 'west': 'library', 'north': 'treasure_room'},
+        'exits': {'south': 'entrance', 'west': 'library', 'north': 'treasure_room',
+                  'east': 'dining_room'},
         'items': [],
         'puzzle': ('На пьедестале надпись: "Назовите число, которое идет после девяти".'
                   ' Введите ответ цифрой или словом.', '10')
@@ -25,7 +26,7 @@ ROOMS = {
     'library': {
           'description': 'Пыльная библиотека. На полках старые свитки. '
           'Где-то здесь может быть ключ от сокровищницы.',
-          'exits': {'east': 'hall', 'north': 'armory'},
+          'exits': {'east': 'hall', 'north': 'armory', 'south' : 'storeroom'},
           'items': ['ancient book'],
           'puzzle': ('В одном свитке загадка: "Что растет, когда его съедают?"'
                      '(ответ одно слово)', 'резонанс')  
@@ -61,7 +62,7 @@ ROOMS = {
           'На столе - пыльная посуда и потускневшие канделябры.'
            'В воздухе витает запах старого воска.',
           'exits': { 'west' : 'hall'},
-          'items': ['silver spoon'],
+          'items': ['silver_spoon'],
           'puzzle': ('На столе вырезано: "Какое число делится на все числа от 1 до 10?"'
                      ,'2520')
     }
